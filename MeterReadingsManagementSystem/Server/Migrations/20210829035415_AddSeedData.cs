@@ -48,7 +48,9 @@ namespace MeterReadingsManagementSystem.Server.Migrations
         {
             public AccountMap()
             {
-                Map(m => m.Id).Name("AccountId");                
+                Map(m => m.Id).Name("AccountId");
+                Map(m => m.FirstName).Name("FirstName");
+                Map(m => m.LastName).Name("LastName");
             }
         }
     }

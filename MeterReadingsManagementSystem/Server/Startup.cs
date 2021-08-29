@@ -1,3 +1,4 @@
+using MeterReadingsManagementSystem.Server.Data;
 using MeterReadingsManagementSystem.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

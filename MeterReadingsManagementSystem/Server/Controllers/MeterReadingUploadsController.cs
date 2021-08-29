@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using MeterReadingsManagementSystem.Server.Services;
 using MeterReadingsManagementSystem.Shared;
 using MeterReadingsManagementSystem.Shared.Csv;
 using MeterReadingsManagementSystem.Shared.Model;
@@ -21,19 +22,33 @@ namespace MeterReadingsManagementSystem.Server.Controllers
     [Route("meter-reading-uploads")]
     public class MeterReadingUploadsController : ControllerBase
     {
+        private readonly MeterReadProcessingService _meterReadProcessingService;
+
+        public MeterReadingUploadsController(MeterReadProcessingService meterReadProcessingService)
+        {
+            this._meterReadProcessingService = meterReadProcessingService;
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Post(IFormFile file, CancellationToken cancellationToken)
+        public async Task<ActionResult<MeterReadingUploadResult>> Post(IFormFile file)
         {
             using (var stream = file.OpenReadStream())
             {
                 using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
                 {
                     CsvReader csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
-                    var accounts = csvReader.GetRecords<MeterReadingEntry>();
+                    var entries = csvReader.GetRecords<MeterReadingEntry>();
+                    var processingResults = _meterReadProcessingService.ProcessMeterReadEntries(entries);
+
+                    var meterReadingUploadResult = new MeterReadingUploadResult()
+                    {
+                        ReadProcessingResults = processingResults
+                    };
+
+                    return Ok(meterReadingUploadResult);
                 }
             }
 
-            return Ok();
         }
     }
 }

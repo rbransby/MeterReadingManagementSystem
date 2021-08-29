@@ -1,3 +1,4 @@
+using MeterReadingsManagementSystem.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,7 +25,10 @@ namespace MeterReadingsManagementSystem.Server
         {
 
             services.AddControllersWithViews();
-            services.AddRazorPages();            
+            services.AddRazorPages();
+            services.AddSwaggerGen();
+            services.AddScoped<MeterReadProcessingService>();
+            services.AddDbContext<DataContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +45,11 @@ namespace MeterReadingsManagementSystem.Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MeterReadingManagementSystem API V1");
+            });
 
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();

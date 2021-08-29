@@ -14,14 +14,9 @@ namespace MeterReadingsManagementSystem.Server.Data
 
         public string DbPath { get; private set; }
 
-        public DataContext()
+        public DataContext(DbContextOptions<DataContext> options)
+        : base(options)
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}MeterReadingManagementSystem.db";
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite($"Data Source={DbPath}");
     }
 }

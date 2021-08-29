@@ -30,20 +30,20 @@ namespace MeterReadingsManagementSystem.Server.Services
                 {
                     meterReading.AccountId = accountId;
                 }
-                else result.FailReasons.Add(MeterReadingUploadFailReason.InvalidAccountId);
+                else result.FailReasons.Add(MeterReadingProcessFailReason.InvalidAccountId);
                 
 
                 if (DateTime.TryParse(entry.MeterReadingDateTime, out DateTime dateTime))
                 {
                     meterReading.MeterReadingDateTime = dateTime;
                 }
-                else result.FailReasons.Add(MeterReadingUploadFailReason.InvalidReadingDate);
+                else result.FailReasons.Add(MeterReadingProcessFailReason.InvalidReadingDate);
 
                 if (int.TryParse(entry.MeterReadValue, out int value))
                 {
                     meterReading.MeterReadValue = value;
                 }
-                else result.FailReasons.Add(MeterReadingUploadFailReason.InvalidReadValue);
+                else result.FailReasons.Add(MeterReadingProcessFailReason.InvalidReadValue);
 
                 // if we have any errors at this point, no point continuing, move to the next entry
                 if (result.FailReasons.Any())
@@ -57,18 +57,19 @@ namespace MeterReadingsManagementSystem.Server.Services
                 // reading values should be NNNNN format - < 99999.. although not explicitly stated in the Acceptance criteria, im also assuming negative readings are invalid. Potentially need to clarify
                 if (meterReading.MeterReadValue > 99999 || meterReading.MeterReadValue < 0)
                 {
-                    result.FailReasons.Add(MeterReadingUploadFailReason.InvalidReadValue);
+                    result.FailReasons.Add(MeterReadingProcessFailReason.InvalidReadValue);
                 }
 
                 // accountId must exist in Accounts
                 if (!_dataContext.Accounts.Any(a => a.Id == meterReading.AccountId))
                 {
-                    result.FailReasons.Add(MeterReadingUploadFailReason.InvalidAccountId);
+                    result.FailReasons.Add(MeterReadingProcessFailReason.InvalidAccountId);
                 }
 
+                // duplicate reading entry
                 if (_dataContext.MeterReadings.Any(mr => mr.AccountId == meterReading.AccountId && mr.MeterReadingDateTime == meterReading.MeterReadingDateTime))
                 {
-                    result.FailReasons.Add(MeterReadingUploadFailReason.DuplicateMeterReadEntry);
+                    result.FailReasons.Add(MeterReadingProcessFailReason.DuplicateMeterReadEntry);
                 }
 
                 if (result.FailReasons.Any())
@@ -78,9 +79,11 @@ namespace MeterReadingsManagementSystem.Server.Services
                 }
 
                 _dataContext.MeterReadings.Add(meterReading);
+                _dataContext.SaveChanges();
                 results.Add(result);
+                
             }
-
+            
             return results;
         }
     }

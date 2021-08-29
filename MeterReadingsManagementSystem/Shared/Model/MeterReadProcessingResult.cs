@@ -13,10 +13,10 @@ namespace MeterReadingsManagementSystem.Shared.Model
         { 
             get 
             {
-                return FailReasons.Any();
+                return !FailReasons.Any();
             } 
         }                
-        public List<MeterReadingUploadFailReason> FailReasons { get; set; } = new List<MeterReadingUploadFailReason>();
+        public List<MeterReadingProcessFailReason> FailReasons { get; set; } = new List<MeterReadingProcessFailReason>();
 
         public MeterReadProcessingResult(MeterReadingEntry entry)
         {

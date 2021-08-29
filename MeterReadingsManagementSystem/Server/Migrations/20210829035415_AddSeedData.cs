@@ -2,7 +2,9 @@
 using CsvHelper.Configuration;
 using MeterReadingsManagementSystem.Server.Data;
 using MeterReadingsManagementSystem.Shared.Model;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Options;
 using System;
 using System.Diagnostics.Metrics;
 using System.Globalization;
@@ -16,9 +18,14 @@ namespace MeterReadingsManagementSystem.Server.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+            var dbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}MeterReadingManagementSystem.db";
+            var contextOptions = new DbContextOptionsBuilder<DataContext>().UseSqlite($"Data Source={dbPath}").Options;
+            
             Assembly assembly = Assembly.GetExecutingAssembly();
             string resourceName = "MeterReadingsManagementSystem.Data.SeedData";
-            using (var dataContext =  new DataContext())
+            using (var dataContext =  new DataContext(contextOptions))
             {
                 Console.WriteLine(assembly.GetName().Name);
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
@@ -37,7 +44,11 @@ namespace MeterReadingsManagementSystem.Server.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            using (var dataContext = new DataContext())
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+            var dbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}MeterReadingManagementSystem.db";
+            var contextOptions = new DbContextOptionsBuilder<DataContext>().UseSqlite($"Data Source={dbPath}").Options;
+            using (var dataContext = new DataContext(contextOptions))
             {
                 dataContext.Accounts.RemoveRange(dataContext.Accounts);
                 dataContext.SaveChanges();

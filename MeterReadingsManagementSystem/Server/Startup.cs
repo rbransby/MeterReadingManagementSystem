@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,12 +30,17 @@ namespace MeterReadingsManagementSystem.Server
             services.AddRazorPages();
             services.AddSwaggerGen();
             services.AddScoped<MeterReadProcessingService>();
-            services.AddDbContext<DataContext>();
+            services.AddDbContext<DataContext>(options => {
+                var folder = Environment.SpecialFolder.LocalApplicationData;
+                var path = Environment.GetFolderPath(folder);
+                var dbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}MeterReadingManagementSystem.db";
+                options.UseSqlite($"Data Source={dbPath}");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+        {            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

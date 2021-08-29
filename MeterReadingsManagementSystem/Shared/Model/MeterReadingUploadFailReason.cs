@@ -5,7 +5,7 @@ using System.Text;
 namespace MeterReadingsManagementSystem.Shared
 {
     
-    public enum MeterReadingUploadFailReason
+    public enum MeterReadingProcessFailReason
     {
         None = 0,
         InvalidAccountId = 1,

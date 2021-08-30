@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MeterReadingsManagementSystem.Shared.Dto
+﻿namespace MeterReadingsManagementSystem.Shared.Dto
 {
     public class MeterReadingDto
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MeterReadingsManagementSystem.Shared.Csv
+﻿namespace MeterReadingsManagementSystem.Shared.Csv
 {
     public class MeterReadingEntry
     {

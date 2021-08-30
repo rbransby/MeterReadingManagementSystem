@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MeterReadingsManagementSystem.Shared
+﻿namespace MeterReadingsManagementSystem.Shared
 {
-    
+
     public enum MeterReadingProcessFailReason
     {
         None = 0,

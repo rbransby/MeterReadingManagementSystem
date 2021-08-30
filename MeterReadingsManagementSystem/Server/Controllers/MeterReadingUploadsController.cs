@@ -1,20 +1,10 @@
 ﻿using CsvHelper;
 using MeterReadingsManagementSystem.Server.Services;
-using MeterReadingsManagementSystem.Shared;
 using MeterReadingsManagementSystem.Shared.Csv;
 using MeterReadingsManagementSystem.Shared.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using static MeterReadingsManagementSystem.Server.Migrations.AddSeedData;
 
 namespace MeterReadingsManagementSystem.Server.Controllers
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MeterReadingsManagementSystem.Shared.Model
+﻿namespace MeterReadingsManagementSystem.Shared.Model
 {
     public class MeterReading
     {
